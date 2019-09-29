@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://unpkg.com/bootstrap@3.4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Persons</h1>
+    <main id="app">
+        <router-view></router-view>
+    </main>
+</div>
+
+<template id="person">
+    <div>
+        <h2>{{ person.name }}</h2>
+        <b>Date of birth: </b>
+        <div>{{ person.dateOfBirth }}</div>
+        <b>Address:</b>
+        <div>{{ person.address.street }}</div>
+        <div>{{ person.address.city }}</div>
+        <div>{{ person.address.zipCode }}</div>
+        <br/>
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <a>
+            <router-link to="/">Back to person list</router-link>
+        </a>
+    </div>
+</template>
+
+<template id="person-list">
+    <div>
+        <div class="actions">
+            <a class="btn btn-default">
+                <router-link :to="{path: '/add-person'}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add person
+                </router-link>
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th class="col-sm-2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="person in persons">
+                <td>{{ person.name }}</td>
+                <td class="col-sm-2">
+                    <a>
+                        <router-link :to="{name: 'person', params: {person_id: person.id}}">Click for details</router-link>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+
+<template id="add-person">
+    <div>
+        <h2>Add new person</h2>
+        <form v-on:submit.prevent="createPerson">
+            <div class="form-group">
+                <label for="add-name">Name</label>
+                <input class="form-control" id="add-name" v-model="person.name" required/>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <vuejs-datepicker
+                        input-class="form-control"
+                        v-model="person.dateOfBirth" required typeable>
+                </vuejs-datepicker>
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+            </div>
+            <div class="form-group">
+                <label for="add-street">Street</label>
+                <input class="form-control" id="add-street" v-model="person.address.street" required/>
+            </div>
+            <div class="form-group">
+                <label for="add-city">City</label>
+                <input class="form-control" id="add-city" v-model="person.address.city" required/>
+            </div>
+            <div class="form-group">
+                <label for="add-zipCode">Zip code</label>
+                <input type="number" class="form-control" id="add-zipCode" v-model="person.address.zipCode" required/>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-default">
+                    <router-link to="/">Cancel</router-link>
+                </a>
+            </div>
+        </form>
+    </div>
+</template>
+
+<script src="lib/vue.js"></script>
+<script src="lib/vue-router.js"></script>
+<script src="lib/vuejs-datepicker.min.js"></script>
+<script src="lib/axios.min.js"></script>
+<script src="person-service.js"></script>
+<script src="persons.js"></script>
+
+</body>
+</html>
